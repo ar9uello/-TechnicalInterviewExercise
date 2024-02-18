@@ -50,7 +50,7 @@ public class Tests
     }
 
     [Test]
-    public async Task AddAsync_ShouldReturnAddedTask()
+    public async Task AddAsync_ShouldReturnTaskId()
     {
         // Arrange
         var taskId = 1;
@@ -69,7 +69,7 @@ public class Tests
     }
 
     [Test]
-    public async Task UpdateAsync_ShouldReturnUpdatedTask()
+    public async Task UpdateAsync_ShouldUpdatedTask()
     {
         // Arrange
         var taskId = 1;
@@ -88,7 +88,7 @@ public class Tests
     }
 
     [Test]
-    public async Task DeleteAsync_ShouldReturnDeletedTask()
+    public async Task DeleteAsync_ShouldDeletedTask()
     {
         // Arrange
         var taskId = 1;

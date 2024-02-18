@@ -8,7 +8,7 @@ public interface ITaskRepository
 
     TaskEntity Get(int id);
 
-    void Create(TaskEntity model);
+    int Create(TaskEntity model);
 
     void Update(TaskEntity model);
 

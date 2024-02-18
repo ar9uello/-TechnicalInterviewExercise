@@ -31,7 +31,6 @@ public class Tests
         Assert.That(tasks, Is.EqualTo(expectedTasks));
     }
 
-
     [Test]
     public void Get_ShouldReturnTaskById()
     {
@@ -50,26 +49,26 @@ public class Tests
         Assert.That(result, Is.EqualTo(expectedTask));
     }
 
-
     [Test]
-    public void Create_ShouldReturnAddedTask()
+    public void Create_ShouldReturnTaskId()
     {
         // Arrange
-        var taskId = 1;
         var taskName = "Task 1";
         var taskDescription = "Description 1";
         var taskStatus = TaskEntityStatus.ToDo;
-        var newTask = new TaskEntity { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
+        var newTask = new TaskEntity { TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
+        var expectedTaskId = 1;
+        _mockTaskRepository.Setup(repo => repo.Create(newTask)).Returns(expectedTaskId);
 
         // Act
-        _taskRepository.Create(newTask);
+        var taskId = _taskRepository.Create(newTask);
 
         // Assert
-        _mockTaskRepository.Verify(repo => repo.Create(newTask), Times.Once);
+        Assert.That(taskId, Is.Not.EqualTo(0));
     }
 
     [Test]
-    public void Update_ShouldReturnUpdatedTask()
+    public void Update_ShouldUpdatedTask()
     {
         // Arrange
         var taskId = 1;
@@ -86,7 +85,7 @@ public class Tests
     }
 
     [Test]
-    public void Remove_ShouldReturnUpdatedTask()
+    public void Remove_ShouldDeleteTask()
     {
         // Arrange
         var taskId = 1;
