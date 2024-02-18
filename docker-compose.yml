@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+
+  taskapi:
+    container_name: taskapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    build:
+      context: .
+      dockerfile: src/services/task/api/Dockerfile
+    ports:
+      - "9000:8080"
