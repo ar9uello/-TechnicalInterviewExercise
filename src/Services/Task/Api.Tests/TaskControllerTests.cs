@@ -109,4 +109,29 @@ public class TaskControllerTests
         Assert.That(task?.TaskStatus, Is.EqualTo(updateTask.TaskStatus));
 
     }
+
+    [Test]
+    public async Task Delete_ShouldUpdatedTask()
+    {
+        // Arrange
+        var stringDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+        var taskName = $"Task {stringDate}";
+        var taskDescription = $"Description {stringDate}";
+        var taskStatus = TaskEntityStatus.ToDo;
+        var newTask = new TaskEntityDto { TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
+        var newJsonContent = JsonSerializer.Serialize(newTask);
+        var newContent = new StringContent(newJsonContent, System.Text.Encoding.UTF8, "application/json");
+
+        var postResponse = await _client.PostAsync($"/api/tasks", newContent);
+
+        postResponse.EnsureSuccessStatusCode();
+        var taskId = await postResponse.Content.ReadFromJsonAsync<int>();
+
+        // Act
+        var response = await _client.DeleteAsync($"/api/tasks/{taskId}");
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+    }
 }

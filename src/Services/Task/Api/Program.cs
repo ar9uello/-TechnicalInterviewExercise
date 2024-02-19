@@ -1,4 +1,5 @@
 using Api.Configuration;
+using Api.Middleware;
 using Application.Interfaces;
 using Application.Interfaces.Persistence;
 using Application.Services;
@@ -31,11 +32,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 
+app.UseCustomExceptionHandler();
+
 app.MapControllers();
 
 app.Run();
 
-void AddAutoMapper(IServiceCollection services)
+static void AddAutoMapper(IServiceCollection services)
 {
     var assembliesToScan = new[]
     {

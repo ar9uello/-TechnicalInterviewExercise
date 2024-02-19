@@ -55,5 +55,17 @@ namespace Api.Controllers
             _taskService.Update(vm);
             return Ok();
         }
+
+        /// <summary>
+        /// Delete task
+        /// </summary>
+        [HttpDelete]
+        [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            _taskService.Delete(id);
+            return Ok();
+        }
     }
 }
