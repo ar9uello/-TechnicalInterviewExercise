@@ -1,20 +1,21 @@
-using Application.Interfaces.Persistence;
+﻿using Application.Interfaces.Persistence;
 using Domain.Entities;
 using Domain.Enums;
 using Moq;
+using Persistence.Repositories;
 
 namespace Persistence.Tests;
 
-public class TaskRepositoryMockTests
+public class UnitOfWorkMockTests
 {
-    private ITaskRepository _taskRepository;
-    private Mock<ITaskRepository> _mockTaskRepository;
+    private IUnitOfWorkRepository _unitOfWorkRepository;
+    private Mock<IUnitOfWorkRepository> _mockUnitOfWorkRepository;
 
     [SetUp]
     public void Setup()
     {
-        _mockTaskRepository = new Mock<ITaskRepository>();
-        _taskRepository = _mockTaskRepository.Object;
+        _mockUnitOfWorkRepository = new Mock<IUnitOfWorkRepository>();
+        _unitOfWorkRepository = _mockUnitOfWorkRepository.Object;
     }
 
     [Test]
@@ -22,10 +23,10 @@ public class TaskRepositoryMockTests
     {
         // Arrange
         var expectedTasks = new List<TaskEntity> { };
-        _mockTaskRepository.Setup(repository => repository.GetAll()).Returns(expectedTasks);
+        _mockUnitOfWorkRepository.Setup(unitOfWork => unitOfWork.TaskRepository.GetAll()).Returns(expectedTasks);
 
         // Act
-        var tasks = _taskRepository.GetAll();
+        var tasks = _unitOfWorkRepository.TaskRepository.GetAll();
 
         // Assert
         Assert.That(tasks, Is.EqualTo(expectedTasks));
@@ -40,10 +41,10 @@ public class TaskRepositoryMockTests
         var taskDescription = "Description 1";
         var taskStatus = TaskEntityStatus.ToDo;
         var expectedTask = new TaskEntity { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
-        _mockTaskRepository.Setup(repo => repo.Get(taskId)).Returns(expectedTask);
+        _mockUnitOfWorkRepository.Setup(unitOfWork => unitOfWork.TaskRepository.Get(taskId)).Returns(expectedTask);
 
         // Act
-        var result = _taskRepository.Get(taskId);
+        var result = _unitOfWorkRepository.TaskRepository.Get(taskId);
 
         // Assert
         Assert.That(result, Is.EqualTo(expectedTask));
@@ -58,10 +59,10 @@ public class TaskRepositoryMockTests
         var taskStatus = TaskEntityStatus.ToDo;
         var newTask = new TaskEntity { TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
         var expectedTaskId = 1;
-        _mockTaskRepository.Setup(repo => repo.Create(newTask)).Returns(expectedTaskId);
+        _mockUnitOfWorkRepository.Setup(unitOfWork => unitOfWork.TaskRepository.Create(newTask)).Returns(expectedTaskId);
 
         // Act
-        var taskId = _taskRepository.Create(newTask);
+        var taskId = _unitOfWorkRepository.TaskRepository.Create(newTask);
 
         // Assert
         Assert.That(taskId, Is.Not.EqualTo(0));
@@ -76,13 +77,13 @@ public class TaskRepositoryMockTests
         var taskDescription = "Description 1";
         var taskStatus = TaskEntityStatus.ToDo;
         var updatedTask = new TaskEntity { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
-        _mockTaskRepository.Setup(repo => repo.Update(updatedTask));
+        _mockUnitOfWorkRepository.Setup(unitOfWork => unitOfWork.TaskRepository.Update(updatedTask));
 
         // Act
-        _taskRepository.Update(updatedTask);
+        _unitOfWorkRepository.TaskRepository.Update(updatedTask);
 
         // Assert
-        _mockTaskRepository.Verify(repo => repo.Update(updatedTask), Times.Once);
+        _mockUnitOfWorkRepository.Verify(unitOfWork => unitOfWork.TaskRepository.Update(updatedTask), Times.Once);
     }
 
     [Test]
@@ -90,13 +91,12 @@ public class TaskRepositoryMockTests
     {
         // Arrange
         var taskId = 1;
-        _mockTaskRepository.Setup(repo => repo.Remove(taskId));
+        _mockUnitOfWorkRepository.Setup(unitOfWork => unitOfWork.TaskRepository.Remove(taskId));
 
         // taskId
-        _taskRepository.Remove(taskId);
+        _unitOfWorkRepository.TaskRepository.Remove(taskId);
 
         // Assert
-        _mockTaskRepository.Verify(repo => repo.Remove(taskId), Times.Once);
+        _mockUnitOfWorkRepository.Verify(unitOfWork => unitOfWork.TaskRepository.Remove(taskId), Times.Once);
     }
-
 }
