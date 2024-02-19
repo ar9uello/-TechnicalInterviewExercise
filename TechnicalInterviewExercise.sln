@@ -24,9 +24,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "src\Services\Task\Persistence\Persistence.csproj", "{37F72476-A78B-420F-B140-30865620CDCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "src\Services\Task\Persistence\Persistence.csproj", "{37F72476-A78B-420F-B140-30865620CDCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.Tests", "src\Services\Task\Persistence.Tests\Persistence.Tests.csproj", "{5F288789-5752-4482-89BE-2A08844166FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.Tests", "src\Services\Task\Persistence.Tests\Persistence.Tests.csproj", "{5F288789-5752-4482-89BE-2A08844166FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{37113C65-9834-49F5-9D07-2080FD620D51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "src\Services\Identity\Api\Api.csproj", "{63EF7AA6-7EEF-4AAF-AEA0-929A0FD9E900}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "src\Services\Identity\Application\Application.csproj", "{9A27076E-D771-4ED7-B7B2-DDA3C98876DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "src\Services\Identity\Persistence\Persistence.csproj", "{9D73B36F-4963-4733-A224-ADB539980D28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +70,18 @@ Global
 		{5F288789-5752-4482-89BE-2A08844166FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F288789-5752-4482-89BE-2A08844166FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F288789-5752-4482-89BE-2A08844166FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63EF7AA6-7EEF-4AAF-AEA0-929A0FD9E900}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63EF7AA6-7EEF-4AAF-AEA0-929A0FD9E900}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63EF7AA6-7EEF-4AAF-AEA0-929A0FD9E900}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63EF7AA6-7EEF-4AAF-AEA0-929A0FD9E900}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A27076E-D771-4ED7-B7B2-DDA3C98876DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A27076E-D771-4ED7-B7B2-DDA3C98876DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A27076E-D771-4ED7-B7B2-DDA3C98876DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A27076E-D771-4ED7-B7B2-DDA3C98876DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D73B36F-4963-4733-A224-ADB539980D28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D73B36F-4963-4733-A224-ADB539980D28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D73B36F-4963-4733-A224-ADB539980D28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D73B36F-4963-4733-A224-ADB539980D28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +96,10 @@ Global
 		{4AE933B3-1FEE-4BFB-9E48-731F91105329} = {214DFCE6-5E23-4085-90C6-FA3D5D20832D}
 		{37F72476-A78B-420F-B140-30865620CDCC} = {214DFCE6-5E23-4085-90C6-FA3D5D20832D}
 		{5F288789-5752-4482-89BE-2A08844166FC} = {214DFCE6-5E23-4085-90C6-FA3D5D20832D}
+		{37113C65-9834-49F5-9D07-2080FD620D51} = {6F395CCC-062F-4119-8D63-75544F6A52A9}
+		{63EF7AA6-7EEF-4AAF-AEA0-929A0FD9E900} = {37113C65-9834-49F5-9D07-2080FD620D51}
+		{9A27076E-D771-4ED7-B7B2-DDA3C98876DF} = {37113C65-9834-49F5-9D07-2080FD620D51}
+		{9D73B36F-4963-4733-A224-ADB539980D28} = {37113C65-9834-49F5-9D07-2080FD620D51}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9587C0FB-B884-4579-9F2C-84B69892B306}

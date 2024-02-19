@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -35,6 +36,7 @@ namespace Api.Controllers
         /// <summary>
         /// Create a new task
         /// </summary>
+        [Authorize]
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
