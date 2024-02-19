@@ -1,16 +1,17 @@
-﻿using Domain.Entities;
+﻿using Application.Dtos;
+using Domain.Entities;
 
 namespace Application.Interfaces.Persistence;
 
 public interface ITaskRepository
 {
-    List<TaskEntity> GetAll();
+    List<TaskEntityDto> GetAll();
 
-    TaskEntity Get(int id);
+    TaskEntityDto Get(int id);
 
-    int Create(TaskEntity model);
+    int Create(TaskEntityDto model);
 
-    void Update(TaskEntity model);
+    void Update(TaskEntityDto model);
 
     void Remove(int id);
 }

@@ -1,5 +1,5 @@
-﻿using Application.Interfaces.Persistence;
-using Domain.Entities;
+﻿using Application.Dtos;
+using Application.Interfaces.Persistence;
 using Domain.Enums;
 using System.Data.SqlClient;
 
@@ -13,9 +13,9 @@ public class TaskRepository : Repository, ITaskRepository
         Transaction = transaction;
     }
 
-    public List<TaskEntity> GetAll()
+    public List<TaskEntityDto> GetAll()
     {
-        var result = new List<TaskEntity>();
+        var result = new List<TaskEntityDto>();
 
         var command = CreateCommand("SELECT * FROM task");
 
@@ -23,7 +23,7 @@ public class TaskRepository : Repository, ITaskRepository
         {
             while (reader.Read())
             {
-                result.Add(new TaskEntity
+                result.Add(new TaskEntityDto
                 {
                     TaskId = Convert.ToInt32(reader["TaskId"]),
                     TaskName = Convert.ToString(reader["TaskName"]) ?? "",
@@ -36,7 +36,7 @@ public class TaskRepository : Repository, ITaskRepository
         return result;
     }
 
-    public TaskEntity Get(int id)
+    public TaskEntityDto Get(int id)
     {
         var command = CreateCommand("SELECT * FROM Task WHERE TaskId = @TaskId");
         command.Parameters.AddWithValue("@TaskId", id);
@@ -45,7 +45,7 @@ public class TaskRepository : Repository, ITaskRepository
         {
             reader.Read();
 
-            return new TaskEntity
+            return new TaskEntityDto
             {
                 TaskId = Convert.ToInt32(reader["TaskId"]),
                 TaskName = Convert.ToString(reader["TaskName"]) ?? "",
@@ -55,7 +55,7 @@ public class TaskRepository : Repository, ITaskRepository
         };
     }
 
-    public int Create(TaskEntity model)
+    public int Create(TaskEntityDto model)
     {
         var query = "INSERT INTO Task (TaskName, TaskDescription, TaskStatus) VALUES (@TaskName, @TaskDescription, @TaskStatus); SELECT SCOPE_IDENTITY();";
         var command = CreateCommand(query);
@@ -67,7 +67,7 @@ public class TaskRepository : Repository, ITaskRepository
         return Convert.ToInt32(command.ExecuteScalar());
     }
 
-    public void Update(TaskEntity model)
+    public void Update(TaskEntityDto model)
     {
         var query = "UPDATE Task set TaskName = @TaskName, TaskDescription = @TaskDescription, TaskStatus = @TaskStatus WHERE TaskId = @TaskId";
         var command = CreateCommand(query);
@@ -75,7 +75,7 @@ public class TaskRepository : Repository, ITaskRepository
         command.Parameters.AddWithValue("@TaskId", model.TaskId);
         command.Parameters.AddWithValue("@TaskName", model.TaskName);
         command.Parameters.AddWithValue("@TaskDescription", model.TaskDescription);
-        command.Parameters.AddWithValue("@TaskStatus", model.TaskStatus);
+        if (model.TaskStatus != null) command.Parameters.AddWithValue("@TaskStatus", model.TaskStatus);
 
         command.ExecuteNonQuery();
     }

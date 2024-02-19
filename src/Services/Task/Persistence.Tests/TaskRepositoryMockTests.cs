@@ -1,5 +1,5 @@
+using Application.Dtos;
 using Application.Interfaces.Persistence;
-using Domain.Entities;
 using Domain.Enums;
 using Moq;
 
@@ -21,7 +21,7 @@ public class TaskRepositoryMockTests
     public void GetAll_ShouldReturnAllTasks()
     {
         // Arrange
-        var expectedTasks = new List<TaskEntity> { };
+        var expectedTasks = new List<TaskEntityDto> { };
         _mockTaskRepository.Setup(repository => repository.GetAll()).Returns(expectedTasks);
 
         // Act
@@ -39,7 +39,7 @@ public class TaskRepositoryMockTests
         var taskName = "Task 1";
         var taskDescription = "Description 1";
         var taskStatus = TaskEntityStatus.ToDo;
-        var expectedTask = new TaskEntity { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
+        var expectedTask = new TaskEntityDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
         _mockTaskRepository.Setup(repo => repo.Get(taskId)).Returns(expectedTask);
 
         // Act
@@ -56,7 +56,7 @@ public class TaskRepositoryMockTests
         var taskName = "Task 1";
         var taskDescription = "Description 1";
         var taskStatus = TaskEntityStatus.ToDo;
-        var newTask = new TaskEntity { TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
+        var newTask = new TaskEntityDto { TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
         var expectedTaskId = 1;
         _mockTaskRepository.Setup(repo => repo.Create(newTask)).Returns(expectedTaskId);
 
@@ -75,7 +75,7 @@ public class TaskRepositoryMockTests
         var taskName = "Task 1";
         var taskDescription = "Description 1";
         var taskStatus = TaskEntityStatus.ToDo;
-        var updatedTask = new TaskEntity { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
+        var updatedTask = new TaskEntityDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
         _mockTaskRepository.Setup(repo => repo.Update(updatedTask));
 
         // Act

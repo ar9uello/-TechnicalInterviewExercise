@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Dtos;
+using Domain.Entities;
 using Domain.Enums;
 using Persistence.Repositories;
 using System.Data.SqlClient;
@@ -35,9 +36,9 @@ public class TaskRepositoryTests
     {
         var tasksBegin = _taskRepository.GetAll();
 
-        _taskRepository.Create(new TaskEntity { TaskName = "Task 1", TaskDescription = "Description 1", TaskStatus = TaskEntityStatus.ToDo });
-        _taskRepository.Create(new TaskEntity { TaskName = "Task 2", TaskDescription = "Description 2", TaskStatus = TaskEntityStatus.Completed });
-        _taskRepository.Create(new TaskEntity { TaskName = "Task 3", TaskDescription = "Description 3", TaskStatus = TaskEntityStatus.Blocked });
+        _taskRepository.Create(new TaskEntityDto { TaskName = "Task 1", TaskDescription = "Description 1", TaskStatus = TaskEntityStatus.ToDo });
+        _taskRepository.Create(new TaskEntityDto { TaskName = "Task 2", TaskDescription = "Description 2", TaskStatus = TaskEntityStatus.Completed });
+        _taskRepository.Create(new TaskEntityDto { TaskName = "Task 3", TaskDescription = "Description 3", TaskStatus = TaskEntityStatus.Blocked });
 
         var tasksEnd = _taskRepository.GetAll();
 
@@ -47,7 +48,7 @@ public class TaskRepositoryTests
     [Test]
     public void Get_ShouldReturnTaskById()
     {
-        var taskId = _taskRepository.Create(new TaskEntity { TaskName = "Task 1", TaskDescription = "Description 1", TaskStatus = TaskEntityStatus.ToDo });
+        var taskId = _taskRepository.Create(new TaskEntityDto { TaskName = "Task 1", TaskDescription = "Description 1", TaskStatus = TaskEntityStatus.ToDo });
 
         var task = _taskRepository.Get(taskId);
 
@@ -57,13 +58,13 @@ public class TaskRepositoryTests
     [Test]
     public void Update_ShouldUpdatedTask()
     {
-        var taskId = _taskRepository.Create(new TaskEntity { TaskName = "Task 1", TaskDescription = "Description 1", TaskStatus = TaskEntityStatus.ToDo });
+        var taskId = _taskRepository.Create(new TaskEntityDto { TaskName = "Task 1", TaskDescription = "Description 1", TaskStatus = TaskEntityStatus.ToDo });
 
         var taskName = "Task 33";
         var taskDescription = "Description 33";
         var taskStatus = TaskEntityStatus.Completed;
 
-        var updatedTask = new TaskEntity { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
+        var updatedTask = new TaskEntityDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
         _taskRepository.Update(updatedTask);
 
         var task = _taskRepository.Get(taskId);
@@ -78,7 +79,7 @@ public class TaskRepositoryTests
     [Test]
     public void Remove_ShouldDeleteTask()
     {
-        var taskId = _taskRepository.Create(new TaskEntity { TaskName = "Task 1", TaskDescription = "Description 1", TaskStatus = TaskEntityStatus.ToDo });
+        var taskId = _taskRepository.Create(new TaskEntityDto { TaskName = "Task 1", TaskDescription = "Description 1", TaskStatus = TaskEntityStatus.ToDo });
 
         var tasksBegin = _taskRepository.GetAll();
 

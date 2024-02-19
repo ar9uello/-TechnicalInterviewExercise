@@ -1,12 +1,13 @@
 ﻿using Application.Dtos;
+using Application.ViewModels;
 
 namespace Application.Interfaces;
 
 public interface ITaskService
 {
-    List<TaskEntityDto> GetAll();
-    TaskEntityDto GetById(int id);
-    int Add(TaskEntityDto taskDto);
-    void Update(TaskEntityDto taskDto);
+    List<GetTaskVm> GetAll();
+    GetTaskVm GetById(int id);
+    int Add(CreateTaskVm vm);
+    void Update(UpdateTaskVm vm);
     void Delete(int id);
 }

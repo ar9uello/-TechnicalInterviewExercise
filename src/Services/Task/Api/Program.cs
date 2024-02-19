@@ -1,16 +1,24 @@
 using Api.Configuration;
+using Application.Interfaces;
+using Application.Interfaces.Persistence;
+using Application.Services;
+using Persistence.UnitOfWork;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var services = builder.Services;
 
-builder.Services.AddControllers();
+services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
-AddAutoMapper(builder.Services);
+services.AddSingleton<IUnitOfWork, UnitOfWorkSqlServer>();
+services.AddSingleton<ITaskService, TaskService>();
+
+AddAutoMapper(services);
 
 var app = builder.Build();
 
