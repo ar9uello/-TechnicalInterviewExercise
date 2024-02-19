@@ -2,7 +2,6 @@
 using Domain.Entities;
 using Domain.Enums;
 using System.Data.SqlClient;
-using System.Threading.Tasks;
 
 namespace Persistence.Repositories;
 
@@ -14,7 +13,7 @@ public class TaskRepository : Repository, ITaskRepository
         Transaction = transaction;
     }
 
-    public IEnumerable<TaskEntity> GetAll()
+    public List<TaskEntity> GetAll()
     {
         var result = new List<TaskEntity>();
 

@@ -1,107 +1,135 @@
+using Api.Configuration;
 using Application.Dtos;
-using Application.Interfaces;
+using Application.Interfaces.Persistence;
+using Application.Services;
+using AutoMapper;
+using Domain.Entities;
 using Domain.Enums;
-using Moq;
+using NSubstitute;
 
 namespace Application.Tests;
 
 public class Tests
 {
-    private ITaskService _taskService;
-    private Mock<ITaskService> _mockTaskService;
+    private IMapper _mapper;
+    private IUnitOfWork _unitOfWork;
+    private ITaskRepository _taskRepository;
+    private TaskService _target;
 
     [SetUp]
     public void Setup()
     {
-        _mockTaskService = new Mock<ITaskService>();
-        _taskService = _mockTaskService.Object;
+        var config = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<WebApiMappingProfile>();
+        });
+
+        _mapper = new Mapper(config);
+        _unitOfWork = Substitute.For<IUnitOfWork>();
+        _taskRepository = Substitute.For<ITaskRepository>();
+
+        _target = new TaskService(_mapper, _unitOfWork);
     }
 
     [Test]
-    public async Task GetAllAsync_ShouldReturnAllTasks()
+    public void GetAll_ShouldReturnAllTasks()
     {
         // Arrange
-        var expectedTasks = new List<TaskDto> {  };
-        _mockTaskService.Setup(service => service.GetAllAsync()).ReturnsAsync(expectedTasks);
+        var tasks = new List<TaskEntity>
+        {
+            new() { TaskId = 1, TaskName = "Task 1", TaskDescription = "Description 1", TaskStatus = TaskEntityStatus.ToDo },
+            new() { TaskId = 2, TaskName = "Task 2", TaskDescription = "Description 2", TaskStatus = TaskEntityStatus.Completed },
+            new() { TaskId = 3, TaskName = "Task 3", TaskDescription = "Description 3", TaskStatus = TaskEntityStatus.Blocked }
+        };
+
+        _unitOfWork.Create().Repositories.TaskRepository.GetAll().Returns(tasks);
 
         // Act
-        var result = await _taskService.GetAllAsync();
+        var result = _target.GetAll();
 
         // Assert
-        Assert.That(result, Is.EqualTo(expectedTasks));
+        Assert.That(result?.Count, Is.EqualTo(tasks.Count));
     }
 
     [Test]
-    public async Task GetByIdAsync_ShouldReturnTaskById()
-    {
-        // Arrange
-        var taskId = 1;
-        var taskName = "Task 1";
-        var taskDescription = "Description 1";
-        var taskStatus = TaskEntityStatus.ToDo;
-        var expectedTask = new TaskDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
-        _mockTaskService.Setup(service => service.GetByIdAsync(taskId)).ReturnsAsync(expectedTask);
-
-        // Act
-        var result = await _taskService.GetByIdAsync(taskId);
-
-        // Assert
-        Assert.That(result, Is.EqualTo(expectedTask));
-    }
-
-    [Test]
-    public async Task AddAsync_ShouldReturnTaskId()
+    public void GetById_ShouldReturnTaskById()
     {
         // Arrange
         var taskId = 1;
         var taskName = "Task 1";
         var taskDescription = "Description 1";
         var taskStatus = TaskEntityStatus.ToDo;
-        var newTask = new TaskDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
-        var expectedTask = new TaskDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
-        _mockTaskService.Setup(service => service.AddAsync(newTask)).ReturnsAsync(expectedTask);
+        var task = new TaskEntity { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
+        var expectedTask = new TaskEntityDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
+        _unitOfWork.Create().Repositories.TaskRepository.Get(taskId).Returns(task);
 
         // Act
-        var result = await _taskService.AddAsync(newTask);
+        var result = _target.GetById(taskId);
+        Assert.Multiple(() =>
+        {
 
-        // Assert
-        Assert.That(result, Is.EqualTo(expectedTask));
+            // Assert
+            Assert.That(result.TaskId, Is.EqualTo(expectedTask.TaskId));
+            Assert.That(result.TaskName, Is.EqualTo(expectedTask.TaskName));
+            Assert.That(result.TaskDescription, Is.EqualTo(expectedTask.TaskDescription));
+            Assert.That(result.TaskStatus, Is.EqualTo(expectedTask.TaskStatus));
+        });
     }
 
     [Test]
-    public async Task UpdateAsync_ShouldUpdatedTask()
+    public void AddAsync_ShouldReturnTaskId()
     {
         // Arrange
         var taskId = 1;
         var taskName = "Task 1";
         var taskDescription = "Description 1";
         var taskStatus = TaskEntityStatus.ToDo;
-        var updatedTask = new TaskDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
-        var expectedTask = new TaskDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
-        _mockTaskService.Setup(service => service.UpdateAsync(updatedTask)).ReturnsAsync(expectedTask);
+        var newTask = new TaskEntityDto { TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
+        _unitOfWork.Create().Repositories.TaskRepository.Create(Arg.Any<TaskEntity>()).Returns(taskId);
 
         // Act
-        var result = await _taskService.UpdateAsync(updatedTask);
+        var result = _target.Add(newTask);
 
         // Assert
-        Assert.That(result, Is.EqualTo(expectedTask));
+        Assert.That(result, Is.EqualTo(taskId));
     }
 
     [Test]
-    public async Task DeleteAsync_ShouldDeletedTask()
+    public void UpdateAsync_ShouldUpdatedTask()
     {
         // Arrange
         var taskId = 1;
         var taskName = "Task 1";
         var taskDescription = "Description 1";
         var taskStatus = TaskEntityStatus.ToDo;
-        var expectedTask = new TaskDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
-        _mockTaskService.Setup(service => service.DeleteAsync(taskId)).ReturnsAsync(expectedTask);
+        var updatedTask = new TaskEntityDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
 
+        _unitOfWork.Create().ReturnsForAnyArgs(Substitute.For<IUnitOfWorkAdapter>());
+        _unitOfWork.Create().Repositories.TaskRepository.ReturnsForAnyArgs(_taskRepository);
+        
         // Act
-        var result = await _taskService.DeleteAsync(taskId);
+        _target.Update(updatedTask);
 
         // Assert
-        Assert.That(result, Is.EqualTo(expectedTask));
+        _taskRepository.Received(1).Update(Arg.Is<TaskEntity>(t =>
+            t.TaskName == updatedTask.TaskName &&
+            t.TaskDescription == updatedTask.TaskDescription &&
+            t.TaskStatus == updatedTask.TaskStatus
+        ));
+    }
+
+    [Test]
+    public void DeleteAsync_ShouldDeletedTask()
+    {
+        // Arrange
+        var taskId = 1;
+        _unitOfWork.Create().ReturnsForAnyArgs(Substitute.For<IUnitOfWorkAdapter>());
+        _unitOfWork.Create().Repositories.TaskRepository.ReturnsForAnyArgs(_taskRepository);
+
+        // Act
+        _target.Delete(taskId);
+
+        // Assert
+        _taskRepository.Received(1).Remove(Arg.Is<int>(taskId));
     }
 }

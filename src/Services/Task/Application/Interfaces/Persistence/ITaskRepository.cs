@@ -4,7 +4,7 @@ namespace Application.Interfaces.Persistence;
 
 public interface ITaskRepository
 {
-    IEnumerable<TaskEntity> GetAll();
+    List<TaskEntity> GetAll();
 
     TaskEntity Get(int id);
 
