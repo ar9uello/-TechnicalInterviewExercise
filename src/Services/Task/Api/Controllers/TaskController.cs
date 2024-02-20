@@ -14,7 +14,6 @@ namespace Api.Controllers
         /// <summary>
         /// Get all tasks
         /// </summary>
-        [Authorize]
         [HttpGet]
         [Route("")]
         [ProducesResponseType(typeof(List<GetTaskVm>), StatusCodes.Status200OK)]

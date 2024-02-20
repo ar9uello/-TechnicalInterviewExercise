@@ -1,0 +1,57 @@
+﻿@page "/"
+@using WebApp.Models
+@inject WebApp.Services.IAuthenticationService AuthenticationService
+@inject WebApp.Services.ITaskService TaskService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+@if (loading)
+{
+    <div class="spinner-border spinner-border-sm"></div>
+}
+@if (TaskList != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">name</th>
+                <th scope="col">description</th>
+                <th scope="col">status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in TaskList)
+            {
+                <tr>
+                    <td>@task.TaskId</td>
+                    <td>@task.TaskName</td>
+                    <td>@task.TaskDescription</td>
+                    <td>@task.TaskStatus</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+
+    private bool loading = true;
+    private IEnumerable<TaskEntity> TaskList = Enumerable.Empty<TaskEntity>();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            loading = true;
+            TaskList = await TaskService.GetAllTask();
+            loading = false;
+
+            StateHasChanged();
+        }
+    }
+
+}
