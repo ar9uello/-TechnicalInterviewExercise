@@ -14,6 +14,7 @@ namespace Api.Controllers
         /// <summary>
         /// Get all tasks
         /// </summary>
+        [Authorize]
         [HttpGet]
         [Route("")]
         [ProducesResponseType(typeof(List<GetTaskVm>), StatusCodes.Status200OK)]
@@ -25,6 +26,7 @@ namespace Api.Controllers
         /// <summary>
         /// Get a task by its id
         /// </summary>
+        [Authorize]
         [HttpGet]
         [Route("{id}")]
         [ProducesResponseType(typeof(GetTaskVm), StatusCodes.Status200OK)]
@@ -49,6 +51,7 @@ namespace Api.Controllers
         /// <summary>
         /// Update task
         /// </summary>
+        [Authorize]
         [HttpPut]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -61,6 +64,7 @@ namespace Api.Controllers
         /// <summary>
         /// Delete task
         /// </summary>
+        [Authorize]
         [HttpDelete]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

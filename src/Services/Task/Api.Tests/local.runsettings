@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <RunConfiguration>
+    <EnvironmentVariables>
+      <ASPNETCORE_ENVIRONMENT>Development</ASPNETCORE_ENVIRONMENT>
+      <JwtSettings_Key>84322CFB66934ECC86D547C5CF4F2EFC</JwtSettings_Key>
+      <JwtSettings_Issuer>Identity</JwtSettings_Issuer>
+      <JwtSettings_Audience>IdentityUser</JwtSettings_Audience>
+    </EnvironmentVariables>
+  </RunConfiguration>
+</RunSettings>

@@ -2,7 +2,11 @@
 using Application.ViewModels;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
+using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
 
 namespace Api.Tests;
@@ -13,11 +17,16 @@ public class TaskControllerTests
     private WebApplicationFactory<Program> _factory;
     private HttpClient _client;
 
+    private string _token;
+
     [SetUp]
     public void Setup()
     {
         _factory = new WebApplicationFactory<Program>();
         _client = _factory.CreateClient();
+
+        _token = GenerateToken();
+        _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_token}");
     }
 
     [TearDown]
@@ -134,4 +143,32 @@ public class TaskControllerTests
         // Assert
         response.EnsureSuccessStatusCode();
     }
+
+    private static string GenerateToken()
+    {
+        string userName = "TestUser";
+
+        var key = Environment.GetEnvironmentVariable("JwtSettings_Key") ?? string.Empty;
+        var issuer = Environment.GetEnvironmentVariable("JwtSettings_Issuer") ?? string.Empty;
+        var audience = Environment.GetEnvironmentVariable("JwtSettings_Audience") ?? string.Empty;
+
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Name, userName),
+        };
+
+        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+        var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+
+        var jwtSecurityToken = new JwtSecurityToken(
+            issuer: issuer,
+            audience: audience,
+            claims: claims,
+            expires: DateTime.UtcNow.AddMinutes(1),
+            signingCredentials: signingCredentials);
+
+        return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+    }
+
 }
