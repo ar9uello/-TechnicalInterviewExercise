@@ -5,7 +5,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+    .AddInteractiveServerComponents().AddCircuitOptions(option =>
+    {
+        option.DetailedErrors = true;
+    });
 
 builder.Services.AddScoped(sp => new HttpClient());
 builder.Services.AddScoped<IUrlService, UrlService>();

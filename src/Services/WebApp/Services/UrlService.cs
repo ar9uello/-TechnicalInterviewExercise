@@ -9,8 +9,8 @@ public interface IUrlService
 public class UrlService : IUrlService
 {
 
-    public const string AutenticateUrl = "http://localhost:9000/api/Account/authenticate";
-    public const string GetTasksUrl = "http://localhost:9001/api/tasks";
+    public const string AutenticateUrl = "http://host.docker.internal:9000/api/Account/authenticate";
+    public const string GetTasksUrl = "http://host.docker.internal:9001/api/tasks";
 
     public string PostAutenticate()
     {

@@ -23,3 +23,14 @@ services:
       dockerfile: src/services/task/api/Dockerfile
     ports:
       - "9001:8080"
+     
+  webapp:
+    container_name: webapp
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    build:
+      context: .
+      dockerfile: src/services/webapp/Dockerfile
+    ports:
+      - "9002:8080"
