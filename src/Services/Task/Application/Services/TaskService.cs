@@ -27,11 +27,11 @@ public class TaskService : ITaskService
     public GetTaskVm GetById(int id)
     {
         using var context = _unitOfWork.Create();
-        var task = context.Repositories.TaskRepository.Get(id);
+        var task = context.Repositories.TaskRepository.GetById(id);
         return _mapper.Map<GetTaskVm>(task);
     }
 
-    public int Add(CreateTaskVm vm)
+    public int Create(CreateTaskVm vm)
     {
         using var context = _unitOfWork.Create();
         var taskDto = _mapper.Map<TaskEntityDto>(vm);
@@ -44,7 +44,7 @@ public class TaskService : ITaskService
     {
         using var context = _unitOfWork.Create();
         
-        var task = context.Repositories.TaskRepository.Get(vm.TaskId);
+        var task = context.Repositories.TaskRepository.GetById(vm.TaskId);
         vm.TaskName ??= task.TaskName;
         vm.TaskDescription ??= task.TaskDescription;
         vm.TaskStatus ??= task.TaskStatus;
@@ -57,7 +57,7 @@ public class TaskService : ITaskService
     public void Delete(int id)
     {
         using var context = _unitOfWork.Create();
-        context.Repositories.TaskRepository.Remove(id);
+        context.Repositories.TaskRepository.Delete(id);
         context.SaveChanges();
     }
 

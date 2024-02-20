@@ -57,7 +57,7 @@ public class TaskControllerTests
     }
 
     [Test]
-    public async Task Add_ShouldReturnTaskId()
+    public async Task Create_ShouldReturnTaskId()
     {
         // Arrange
         var stringDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");

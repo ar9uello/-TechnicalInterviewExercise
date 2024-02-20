@@ -7,7 +7,7 @@ public interface ITaskService
 {
     List<GetTaskVm> GetAll();
     GetTaskVm GetById(int id);
-    int Add(CreateTaskVm vm);
+    int Create(CreateTaskVm vm);
     void Update(UpdateTaskVm vm);
     void Delete(int id);
 }

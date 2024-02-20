@@ -40,9 +40,9 @@ namespace Api.Controllers
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult Add([FromBody] CreateTaskVm vm)
+        public IActionResult Create([FromBody] CreateTaskVm vm)
         {
-            var newId = _taskService.Add(vm);
+            var newId = _taskService.Create(vm);
             return CreatedAtAction(nameof(GetById), new { id = newId }, newId);
         }
 

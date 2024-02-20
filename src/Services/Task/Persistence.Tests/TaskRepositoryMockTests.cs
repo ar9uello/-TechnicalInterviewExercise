@@ -32,7 +32,7 @@ public class TaskRepositoryMockTests
     }
 
     [Test]
-    public void Get_ShouldReturnTaskById()
+    public void GetById_ShouldReturnTaskById()
     {
         // Arrange
         var taskId = 1;
@@ -40,10 +40,10 @@ public class TaskRepositoryMockTests
         var taskDescription = "Description 1";
         var taskStatus = TaskEntityStatus.ToDo;
         var expectedTask = new TaskEntityDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
-        _mockTaskRepository.Setup(repo => repo.Get(taskId)).Returns(expectedTask);
+        _mockTaskRepository.Setup(repo => repo.GetById(taskId)).Returns(expectedTask);
 
         // Act
-        var result = _taskRepository.Get(taskId);
+        var result = _taskRepository.GetById(taskId);
 
         // Assert
         Assert.That(result, Is.EqualTo(expectedTask));
@@ -86,17 +86,17 @@ public class TaskRepositoryMockTests
     }
 
     [Test]
-    public void Remove_ShouldDeleteTask()
+    public void Delete_ShouldDeleteTask()
     {
         // Arrange
         var taskId = 1;
-        _mockTaskRepository.Setup(repo => repo.Remove(taskId));
+        _mockTaskRepository.Setup(repo => repo.Delete(taskId));
 
         // taskId
-        _taskRepository.Remove(taskId);
+        _taskRepository.Delete(taskId);
 
         // Assert
-        _mockTaskRepository.Verify(repo => repo.Remove(taskId), Times.Once);
+        _mockTaskRepository.Verify(repo => repo.Delete(taskId), Times.Once);
     }
 
 }

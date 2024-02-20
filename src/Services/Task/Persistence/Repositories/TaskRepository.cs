@@ -36,7 +36,7 @@ public class TaskRepository : Repository, ITaskRepository
         return result;
     }
 
-    public TaskEntityDto Get(int id)
+    public TaskEntityDto GetById(int id)
     {
         var command = CreateCommand("SELECT * FROM Task WHERE TaskId = @TaskId");
         command.Parameters.AddWithValue("@TaskId", id);
@@ -75,12 +75,12 @@ public class TaskRepository : Repository, ITaskRepository
         command.Parameters.AddWithValue("@TaskId", model.TaskId);
         command.Parameters.AddWithValue("@TaskName", model.TaskName);
         command.Parameters.AddWithValue("@TaskDescription", model.TaskDescription);
-        if (model.TaskStatus != null) command.Parameters.AddWithValue("@TaskStatus", model.TaskStatus);
+        command.Parameters.AddWithValue("@TaskStatus", model.TaskStatus);
 
         command.ExecuteNonQuery();
     }
 
-    public void Remove(int taskId)
+    public void Delete(int taskId)
     {
         var command = CreateCommand("DELETE FROM Task WHERE TaskId = @TaskId");
         command.Parameters.AddWithValue("@TaskId", taskId);

@@ -4,7 +4,6 @@ using Application.Interfaces.Persistence;
 using Application.Services;
 using Application.ViewModels;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Enums;
 using NSubstitute;
 
@@ -62,7 +61,7 @@ public class Tests
         var taskStatus = TaskEntityStatus.ToDo;
         var task = new TaskEntityDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
         var expectedTask = new TaskEntityDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
-        _unitOfWork.Create().Repositories.TaskRepository.Get(taskId).Returns(task);
+        _unitOfWork.Create().Repositories.TaskRepository.GetById(taskId).Returns(task);
 
         // Act
         var result = _target.GetById(taskId);
@@ -77,7 +76,7 @@ public class Tests
     }
 
     [Test]
-    public void Add_ShouldReturnTaskId()
+    public void Create_ShouldReturnTaskId()
     {
         // Arrange
         var taskId = 1;
@@ -88,7 +87,7 @@ public class Tests
         _unitOfWork.Create().Repositories.TaskRepository.Create(Arg.Any<TaskEntityDto>()).Returns(taskId);
 
         // Act
-        var result = _target.Add(newTask);
+        var result = _target.Create(newTask);
 
         // Assert
         Assert.That(result, Is.EqualTo(taskId));
@@ -130,6 +129,6 @@ public class Tests
         _target.Delete(taskId);
 
         // Assert
-        _taskRepository.Received(1).Remove(Arg.Is<int>(taskId));
+        _taskRepository.Received(1).Delete(Arg.Is<int>(taskId));
     }
 }

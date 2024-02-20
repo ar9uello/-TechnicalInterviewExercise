@@ -46,11 +46,21 @@ public class TaskRepositoryTests
     }
 
     [Test]
-    public void Get_ShouldReturnTaskById()
+    public void GetById_ShouldReturnTaskById()
     {
         var taskId = _taskRepository.Create(new TaskEntityDto { TaskName = "Task 1", TaskDescription = "Description 1", TaskStatus = TaskEntityStatus.ToDo });
 
-        var task = _taskRepository.Get(taskId);
+        var task = _taskRepository.GetById(taskId);
+
+        Assert.That(task.TaskId, Is.EqualTo(taskId));
+    }
+
+    [Test]
+    public void Create_ShouldReturnTaskById()
+    {
+        var taskId = _taskRepository.Create(new TaskEntityDto { TaskName = "Task 1", TaskDescription = "Description 1", TaskStatus = TaskEntityStatus.ToDo });
+
+        var task = _taskRepository.GetById(taskId);
 
         Assert.That(task.TaskId, Is.EqualTo(taskId));
     }
@@ -67,7 +77,7 @@ public class TaskRepositoryTests
         var updatedTask = new TaskEntityDto { TaskId = taskId, TaskName = taskName, TaskDescription = taskDescription, TaskStatus = taskStatus };
         _taskRepository.Update(updatedTask);
 
-        var task = _taskRepository.Get(taskId);
+        var task = _taskRepository.GetById(taskId);
         Assert.Multiple(() =>
         {
             Assert.That(updatedTask.TaskName, Is.EqualTo(taskName));
@@ -77,13 +87,13 @@ public class TaskRepositoryTests
     }
 
     [Test]
-    public void Remove_ShouldDeleteTask()
+    public void Delete_ShouldDeleteTask()
     {
         var taskId = _taskRepository.Create(new TaskEntityDto { TaskName = "Task 1", TaskDescription = "Description 1", TaskStatus = TaskEntityStatus.ToDo });
 
         var tasksBegin = _taskRepository.GetAll();
 
-        _taskRepository.Remove(taskId);
+        _taskRepository.Delete(taskId);
 
         var tasksEnd = _taskRepository.GetAll();
 
